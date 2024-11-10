@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cambiar Contraseña</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Cambiar Contraseña para {{ user.correo }}</h1>
+
+        <!-- Bloque para mensajes -->
+        {% with message = get_message() %} {% if message %}
+        <div class="flashes {{ message[0] }}">
+            {{ message[1] }}
+        </div>
+        {% endif %} {% endwith %}
+
+        <!-- Formulario para cambiar la contraseña -->
+        <form method="post">
+            <div class="mb-3">
+                <label para="nueva_contrasena">Nueva Contraseña:</label>
+                <input type="password" name="nueva_contrasena" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label para="confirmar_contrasena">Confirmar Contraseña:</label>
+                <input type="password" name="confirmar_contrasena" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
+            </div>
+        </form>
+
+        <a href="{{ url_for('gestion_usuarios') }}">Volver a la Gestión de Usuarios</a>
+    </div>
+
+
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

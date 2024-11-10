@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='GestionUser.css')}}">
+    <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+</head>
+
+<body>
+
+    <!-- Bloque para mensajes -->
+    {% with message = get_message() %} {% if message %}
+    <div class="flashes {{ message[0] }}">
+        {{ message[1] }}
+    </div>
+    {% endif %} {% endwith %}
+
+    <div class="container mt-5">
+        <a href="{{ url_for('go_home6') }}" class="btn btn-outline-danger" style="float: right;">
+            <p class="bi bi-house-door" style="margin-bottom: 0rem;"> Volver al Inicio</p>
+        </a>
+        <h1>Gestión de Usuarios</h1>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="roleFilter">Filtrar por Rol</label>
+                <select id="roleFilter" class="form-control">
+                    <option value="">Todos</option>
+                    <option value="0">Administrador</option>
+                    <option value="1">Usuario</option>
+                    <option value="2">Profesor</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="emailSearch">Buscar por Correo</label>
+                <input type="text" id="emailSearch" class="form-control" placeholder="Buscar por correo">
+            </div>
+
+            <div class="botones">
+                <a href="{{ url_for('crear_profesor') }}" class="btn btn-success mb-3 agregar"><i class="bi bi-person-standing"></i>   Agregar Profesor</a>
+            </div>
+
+        </div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Correo</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody">
+                {% for user in lista_usuarios %}
+                <!-- Iterar sobre la lista de usuarios -->
+                <tr data-rol="{{ user.rol.id }}" data-correo="{{ user.correo }}">
+                    <td>{{ user.correo }}</td>
+                    <td>
+                        {{ user.rol.nombre }}
+                        <!-- Mostrar nombres y apellidos si el rol es profesor y está en el diccionario nombres_profesores -->
+                        {% if user.id in nombres_profesores %} ({{ nombres_profesores[user.id] }}) {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('cambiar_contrasena', id=user.id) }}" class="btn btn-warning">Restablecer Contraseña</a>
+                        <!-- Botón para restablecer contraseña -->
+                        <a class="btn btn-info"><i class="bi bi-pencil"></i>  Editar</a>
+                        <!-- Botón para editar -->
+                        <a class="btn btn-danger"><i class="bi bi-trash"></i>  Eliminar</a>
+                        <!-- Botón para eliminar -->
+                        {% if user.rol.id == 1 %}
+
+                        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                  Clases
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                  <li><a href="{{ url_for('asignar_clases', user_id=user.id) }}" class="dropdown-item"><i class="bi bi-calendar-plus-fill"></i>   Asignar Clases</a></li>
+                                  <li><a class="dropdown-item" href="#"><i class="bi bi-calendar3"></i>   Ver Clases</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <!--Boton de asignar clases-->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#roleFilter').on('change', function() {
+                filterTable();
+            });
+
+            $('#emailSearch').on('input', function() {
+                filterTable();
+            });
+
+            function filterTable() {
+                var selectedRole = $('#roleFilter').val();
+                var emailSearch = $('#emailSearch').val().toLowerCase();
+
+                $('#userTableBody tr').each(function() {
+                    var role = $(this).data('rol');
+                    var correo = $(this).data('correo').toLowerCase();
+                    var roleMatch = (selectedRole === "" || role == selectedRole);
+                    var emailMatch = correo.indexOf(emailSearch) !== -1;
+                    if (roleMatch && emailMatch) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+
+        function confirmarEliminacion(userId, correo, rol) {
+            swal({
+                title: "¿Estás seguro?",
+                text: "Seguro que quieres eliminar este usuario? \nCorreo: " + correo + "\nRol: " + rol,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sí, estoy seguro",
+                cancelButtonText: "No, cancelar",
+                closeOnConfirm: false
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    // Hacer una solicitud POST para eliminar el usuario
+                    $.ajax({
+                        url: '/eliminar_usuario/' + userId,
+                        type: 'POST',
+                        success: function(result) {
+                            // Recargar la página después de la eliminación
+                            location.reload();
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

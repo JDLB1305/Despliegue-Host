@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Clases de Selección</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        .month-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .month-list .month {
+            margin-bottom: 10px;
+        }
+        
+        .month-list .collapse {
+            transition: height 0.3s ease-in-out;
+        }
+    </style>
+
+    <script>
+        function toggleSelectAll(checkbox, monthId) {
+            var checkboxes = document.querySelectorAll('#mes-' + monthId + ' input[type="checkbox"]');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].checked = checkbox.checked;
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Clases de Selección a partir de {{ nombre_del_mes(current_month) }} / {{ current_year }}</h1>
+
+        <div id="accordion">
+            <form id="ClasesSelec" action="{{ url_for('imprimir_clases_seleccionadas') }}" method="POST">
+                <!-- Asegúrate de que el formulario tenga el método POST -->
+                {% for ano_mes, clases in clases_por_mes.items() %}
+                <div class="card month">
+                    <div class="card-header" id="heading{{ ano_mes[1] }}">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#mes-{{ ano_mes[0] }}-{{ ano_mes[1] }}" aria-expanded="false" aria-controls="mes-{{ ano_mes[0] }}-{{ ano_mes[1] }}">
+                                {{ nombre_del_mes(ano_mes[1]) }} / {{ ano_mes[0] }}
+                            </button>
+                            <!-- Checkbox para seleccionar todas las clases del mes -->
+                            <input type="checkbox" id="select_all_{{ ano_mes[0] }}_{{ ano_mes[1] }}" onclick="toggleSelectAll(this, '{{ ano_mes[0] }}-{{ ano_mes[1] }}')">
+                            <label for="select_all_{{ ano_mes[0] }}_{{ ano_mes[1] }}">Seleccionar todas</label>
+                        </h5>
+                    </div>
+
+                    <div id="mes-{{ ano_mes[0] }}-{{ ano_mes[1] }}" class="collapse" aria-labelledby="heading{{ ano_mes[1] }}" data-parent="#accordion">
+                        <div class="card-body">
+                            {% if clases %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Seleccionar</th>
+                                        <th>Fecha</th>
+                                        <th>Descripción</th>
+                                        <th>Horario</th>
+                                        <th>Profesor</th>
+                                        <th>Cupos disponibles</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for clase in clases %}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="seleccionar_{{ clase.id }}" value="true">
+                                        </td>
+                                        <td>{{ clase.fecha_programada }}</td>
+                                        <td>{{ clase.descripcion }}</td>
+                                        <td>{{ clase.hora_inicio }} - {{ clase.hora_fin }}</td>
+                                        <td>{{ profesores_nombres.get(clase.profesor_id, "Desconocido") }}</td>
+                                        <td>{{ clase.numero_cupos }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            {% else %}
+                            <p>No hay clases programadas para este mes</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- El botón para enviar el formulario -->
+                <input type="submit" value="Seleccionar clases" onclick="confirmarSeleccion()" class="btn btn-primary mt-3">
+            </form>
+        </div>
+
+        <!-- Bloque para mensajes -->
+        {% with message = get_message() %} {% if message %}
+        <div class="flashes {{ message[0] }}">
+            {{ message[1] }}
+        </div>
+        {% endif %} {% endwith %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('ClasesSelec').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita el envío del formulario
+
+            const form = event.target; // Captura el formulario
+            const formData = new FormData(form); // Recoge los datos del formulario
+
+            // Realiza la solicitud fetch al servidor
+            fetch(form.action, { // Usa la acción definida en el formulario
+                    method: 'POST', // o 'GET', según corresponda
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "info") {
+                        // Si hay un mensaje de información (por ejemplo, error de validación)
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Información',
+                            text: data.message,
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        // Supongamos que cualquier otro estado es éxito
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sus clases fueron seleccionadas satisfactoriamente!',
+                            text: "En su correo electronico encontrará el resumen de sus clases.",
+                            confirmButtonText: 'Volver al Inicio'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = "{{ url_for('step_r') }}"; // Redirige a la página de inicio o a la página que prefieras
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Ocurrió un problema al procesar su solicitud. Por favor, intente de nuevo.',
+                        confirmButtonText: 'OK'
+                    });
+                });
+        });
+    </script>
+</body>
+
+</html>

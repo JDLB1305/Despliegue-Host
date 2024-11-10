@@ -1,0 +1,205 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0; /* Ocultar inicialmente la barra lateral */
+    height: 100%;
+    width: 250px;
+    background: linear-gradient(to top, black, 50%, red);
+    padding-top: 50px;
+    transition: all 0.3s ease;
+    z-index: 998;
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar .accordion {
+    width: 100%;
+}
+
+.sidebar .accordion .card {
+    width: 100%;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sidebar .accordion .card .card-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.sidebar .accordion .card .card-body {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar .accordion .card .card-body a {
+    margin: 5px;
+}
+
+.sidebar .hamburger {
+    display: none;
+    /* Ocultar el icono de hamburguesa por defecto */
+}
+/* Estilos específicos para pantallas pequeñas (menos de 768px de ancho) */
+
+#mobileImages {
+    display: none; /* Mostrar imágenes independientes */
+  }
+
+@media (max-width: 767.98px) {
+    .sidebar {
+        left: -250px;
+        z-index: 999;
+    }
+    .sidebar.active {
+        left: 0;
+    }
+    .sidebar .hamburger {
+        display: block;
+        /* Mostrar el icono de hamburguesa en pantallas pequeñas */
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        cursor: pointer;
+        z-index: 999;
+    }
+
+    .hamburger {
+        display: block; /* Mostrar el icono de hamburguesa en pantallas pequeñas */
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        cursor: pointer;
+        z-index: 999; /* Asegura que el botón esté visible por encima de la barra */
+    }
+
+
+    #carrusel-container {
+        margin-left: 0; /* Elimina el margen izquierdo */
+        margin-top: 10px; /* Ajusta el margen superior según sea necesario */
+        width: 100%; /* Asegura que el carrusel ocupe todo el ancho de la pantalla */
+        display: none;
+    }
+
+    .carousel-inner img {
+        width: 100%; /* Las imágenes ocupan el ancho total del contenedor */
+        height: auto; /* Mantiene la proporción de la imagen */
+    }
+
+    .carousel-caption {
+        font-size: 12px; /* Reduce el tamaño del texto en dispositivos móviles */
+        padding: 5px; /* Reduce el padding alrededor del texto */
+    }
+
+    #mobileImages {
+        display: block; /* Mostrar imágenes independientes */
+      }
+    
+    #mobileImages img {
+        width: 100%; /* Asegurar que las imágenes se ajusten al ancho del contenedor */
+        padding: 15px; /* Espaciado entre las imágenes */
+      }
+}
+
+/* ---- Botones Barra Lateral Home ---*/
+
+.btn-link {
+    color: #ffffff;
+    font-size: large;
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    color: #e9e9e9;
+    text-decoration: none;
+}
+
+.btn.focus,
+.btn:focus {
+    outline: 0;
+    box-shadow: none;
+}
+
+.btn-link.focus,
+.btn-link:focus {
+    text-decoration: none;
+}
+
+/* Estilos básicos para el carnet */
+
+.carnet-container {
+    width: 350px;
+    border: 1px solid #000;
+    padding: 20px;
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-image: url("../static/images/Fondo1.jpg");
+}
+
+.carnet-header {
+    margin-bottom: 20px;
+}
+
+.carnet-header h3 {
+    font-size: large;
+}
+
+.cont {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.foto-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+    border: 1px solid #f93a3a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#foto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.foto-container input[type="file"] {
+    display: none;
+}
+
+.foto-container label {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #000;
+    color: #fff;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#qr-image {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+}
+
+.carnet-footer {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}

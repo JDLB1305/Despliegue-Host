@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='clases.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <script src="sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Inscripciones</title>
+</head>
+
+<body>
+
+    <a href="{{ url_for('go_home3') }}" class="btn btn-outline-danger" style="margin-top: 15px;width: 150px;margin-left: -64em;">
+        <p class="bi bi-house-door" style="margin-bottom: 0rem;"> Volver al Inicio</p>
+    </a>
+
+    <h2 class="TituloForm">Formulario de Inscripcion</h2>
+
+    <form class="FormInscrip" action="{{url_for('gift')}}" method="POST" , "GET">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Datos Basicos</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Información de Salud</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false">Clases</button>
+            </li>
+
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="nombre">Nombre(s):</label>
+                        <input type="text" name="nombres" placeholder="Digite sus nombres" required><br>
+                    </div>
+                    <div class="contenido">
+                        <label for="apellido">Apellido(s):</label>
+                        <input type="text" name="apellidos" placeholder="Digite sus apellidos" required><br>
+                    </div>
+                </div>
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="edad">Edad:</label>
+                        <input type="number" name="edad" placeholder="Digite su edad" required><br>
+                    </div>
+                    <div class="contenido">
+                        <label for="tel">Telefono:</label>
+                        <input type="number" name="tel" placeholder="Digite su numero de celular" required><br>
+                    </div>
+                </div>
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="tipoDocumento">Tipo de Documento:</label>
+                        <select name="tipoDocumento" required>
+                            <option value="TI">T.I</option>
+                            <option value="C.C">C.C</option>
+                            <option value="C.E">C.E</option>
+                        </select><br>
+                    </div>
+                    <div class="contenido">
+                        <label for="documento">Número de Documento:</label>
+                        <input type="number" name="documento" placeholder="Digite su numero de documento" required><br>
+                    </div>
+                </div>
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                        <input type="date" name="fechaNacimiento" required><br>
+                    </div>
+                    <div class="contenido">
+                        <label for="sexo">Sexo:</label>
+                        <select name="sexo" required>
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                            <option value="PD">Prefiero no decirlo</option>
+                        </select><br>
+                    </div>
+                </div>
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="Direccion">Direccion de Residencia:</label>
+                        <input type="text" name="direccion" placeholder="Digite solo su direccion" required><br>
+                    </div>
+                    <div class="contenido">
+                        <label for="Barrio">Barrio:</label>
+                        <input type="text" name="barrio" placeholder="Nombre del barrio" required><br>
+                    </div>
+                </div>
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="Q1">Usted autoriza el uso de las imágenes (fotografías y videos) para la difusión de nuestra escuela, club</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="autorizo_si_no" id="flexRadioDefault1" value="Si">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Si
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="autorizo_si_no" id="flexRadioDefault1" value="No">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              No
+                            </label>
+                        </div>
+                    </div>
+                    <div class="contenido">
+                        <label for="edu">Nivel Educativo:</label>
+                        <select name="edu" required>
+                            <option value="P">Primaria</option>
+                            <option value="B">Bachillearto</option>
+                            <option value="T">Tecnico/Tecnologo</option>
+                            <option value="PR">Profesional</option>
+                            <option value="M">Maestria</option>
+                            <option value="D">Doctorado</option>
+                        </select><br>
+                    </div>
+                </div>
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="Poblacion">Grupo Poblacional:</label>
+                        <select name="Poblacion" required>
+                            <option value="A">Afrodescendiente</option>
+                            <option value="I">Indigena</option>
+                            <option value="R">Racial</option>
+                            <option value="VC">Victima del Conflicto</option>
+                            <option value="N">Ninguna</option>
+                        </select><br>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="eps">EPS (Entidad Promotora de Salud):</label>
+                        <input type="text" name="eps" required placeholder="Example: Compensar"><br>
+                    </div>
+                    <div class="contenido">
+                        <label for="rh">RH (Factor Rh):</label>
+                        <input type="text" name="rh" placeholder="O,A,B,AB + o -" required><br>
+                    </div>
+                </div>
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="nombreA">Nombre Acudiente:</label>
+                        <input type="text" name="nombreAcu" placeholder="Digite el nombre del acudiente" required><br>
+                    </div>
+                    <div class="contenido">
+                        <label for="telAcu">Telefono Acudiente:</label>
+                        <input type="number" name="telAcu" placeholder="Numero de celular del acudiente" required><br>
+                    </div>
+                </div>
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="dis">Alguna Discapacidad:</label>
+                        <select name="dis" required>
+                            <option value="F">Fisica</option>
+                            <option value="V">Visual</option>
+                            <option value="T">Intelectual</option>
+                            <option value="AU">Auditiva</option>
+                            <option value="D">Down</option>
+                            <option value="N">Ninguna</option>
+                        </select><br>
+                    </div>
+                    <div class="contenido">
+                        <label for="enfermedad">Presenta alguna enfermedad crónica o preexistente:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="enfermedad_si" id="siEnfermedad" onclick="mostrarCuadroEnfermedad()">
+                            <label class="form-check-label" for="siEnfermedad">Si</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="enfermedad_si" id="noEnfermedad" onclick="ocultarCuadroEnfermedad()">
+                            <label class="form-check-label" for="noEnfermedad">No</label>
+                        </div>
+
+                        <div id="cuadroTextoEnfermedad" style="display: none;">
+                            <label for="enfermedadDesc">Describa la enfermedad:</label>
+                            <input type="text" id="enfermedadDesc" name="enfermedadDesc">
+                        </div>
+
+                        <script>
+                            function mostrarCuadroEnfermedad() {
+                                document.getElementById("cuadroTextoEnfermedad").style.display = "block";
+                            }
+
+                            function ocultarCuadroEnfermedad() {
+                                document.getElementById("cuadroTextoEnfermedad").style.display = "none";
+                            }
+                        </script>
+                    </div>
+                </div>
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="hospitalizacion">Presenta alguna hospitalización, tratamiento médico o medicación recetada:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="hospitalizacionRadio" id="siHospitalizacion" onclick="mostrarCuadroHospitalizacion()">
+                            <label class="form-check-label" for="siHospitalizacion">Si</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="hospitalizacionRadio" id="noHospitalizacion" onclick="ocultarCuadroHospitalizacion()">
+                            <label class="form-check-label" for="noHospitalizacion">No</label>
+                        </div>
+
+                        <div id="cuadroTextoHospitalizacion" style="display: none;">
+                            <label for="hospitalizacionDesc">Descripcion:</label>
+                            <input type="text" id="hospitalizacionDesc" name="hospitalizacionDesc">
+                        </div>
+
+                        <script>
+                            function mostrarCuadroHospitalizacion() {
+                                document.getElementById("cuadroTextoHospitalizacion").style.display = "block";
+                            }
+
+                            function ocultarCuadroHospitalizacion() {
+                                document.getElementById("cuadroTextoHospitalizacion").style.display = "none";
+                            }
+                        </script>
+                    </div>
+                    <div class="contenido">
+                        <label for="Q1">¿Usted se encuentra en condiciones físicas y médicas para practicar actividad física?</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio_condicion" id="flexRadioDefault1" value="Si">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              Si
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="radio_condicion" id="flexRadioDefault2" value="No">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                              No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contenedor">
+                    <div class="contenido">
+                        <label for="talla">Estatura (m):</label>
+                        <input type="number" id="talla" name="talla" value="1.00" step="0.01" min="0.50" max="2.50" required><br>
+                    </div>
+                    <div class="contenido">
+                        <label for="peso">Peso(kg) :</label>
+                        <input type="number" name="peso" placeholder="Digite su peso en kilogramos" required><br>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab" tabindex="0">
+
+                <div class="container">
+                    <div class="row" style="justify-content: space-evenly;">
+
+                        {% for curso in cursos %}
+                        <div class="col-md-4">
+                            <div class="Contenedor2" id="contenedor-{{ curso.id }}">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <!-- Mostramos el número de clases o 'mensualidad' según lo almacenado -->
+                                        <h2 class="card-title">{{ curso.precio2 if curso.precio2 != 'mensualidad' else 'Mensualidad' }}</h2>
+
+                                        <!-- Mostramos la descripción -->
+                                        <h5 class="textoClass">{{ curso.descripcion }}</h5>
+
+                                        <!-- Mostramos el precio -->
+                                        <p class="card-text">Valor: {{ curso.precio }} </p>
+
+                                        <!-- Radio button para seleccionar el curso -->
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="flexRadioDefaultC" id="{{ curso.id }}" value="{{ curso.precio2 }}">
+                                            <label class="form-check-label" for="flexRadioDefault1">
+                                                  Seleccionar
+                                                </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <input id="enviar-btn" type="submit" value="Enviar">
+            </div>
+
+
+
+
+
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script>
+        // Función que se ejecuta al cargar la página
+        window.onload = function() {
+            // Obtener los contenedores por su identificador único
+            var contenedor1 = document.getElementById("contenedor-1");
+            var contenedor2 = document.getElementById("contenedor-2");
+            var contenedor3 = document.getElementById("contenedor-3");
+
+            // Agregar eventos de clic a cada contenedor
+            contenedor1.addEventListener("click", function() {
+                // Obtener el texto del h2 y p dentro del contenedor
+                var clases = this.querySelector("h2").innerText;
+                var valor = this.querySelector("p").innerText;
+
+                // Mostrar los valores en la consola (puedes hacer lo que necesites con ellos aquí)
+                console.log("Clases: " + clases);
+                console.log("Valor: " + valor);
+            });
+
+            contenedor2.addEventListener("click", function() {
+                var clases = this.querySelector("h2").innerText;
+                var valor = this.querySelector("p").innerText;
+                console.log("Clases: " + clases);
+                console.log("Valor: " + valor);
+            });
+
+            contenedor3.addEventListener("click", function() {
+                var clases = this.querySelector("h2").innerText;
+                var valor = this.querySelector("p").innerText;
+                console.log("Clases: " + clases);
+                console.log("Valor: " + valor);
+            });
+        };
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('enviar-btn').addEventListener('click', function(event) {
+            event.preventDefault(); // Prevenir el envío del formulario
+            Swal.fire({
+                title: 'Confirmación',
+                text: '¿Está seguro que desea enviar el formulario?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí',
+                cancelButtonText: 'No'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.querySelector('form').submit(); // Enviar el formulario si se confirma la alerta
+                }
+            });
+        });
+    </script>
+
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

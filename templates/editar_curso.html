@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Curso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-container {
+            width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #cf0000;
+            border-radius: 10px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2% auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>Editar Curso</h2>
+        <form action="{{ url_for('actualizar_curso', id=curso.id) }}" method="POST">
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <input type="text" id="descripcion" name="descripcion" value="{{ curso.descripcion }}" required>
+            </div>
+
+
+
+
+            <div class="form-group">
+                <label for="number">Número de clases</label>
+                <input id="num_clases" name="num_clases" value="{{ curso.precio2 }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="precio">Precio(COP)</label>
+                <input type="number" id="precio" name="precio" value="{{ curso.precio }}" required>
+            </div>
+
+
+
+
+            <button type="submit" class="btn">Actualizar</button>
+            <a href="{{ url_for('admin_cursos') }}" class="btn btn-secondary">Volver</a>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title> 
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title> Flask App </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">  
+    <!--Fuentes --> 
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <!-- bostrap-->
+    <link rel="stylesheet" href="{{url_for ('static', filename="Inscripcion.css")}}">
+    <!-- Main CSS-->
+    <link rel="stylesheet" href="{{url_for ('static', filename="bootstrap.min.css")}}">
+
+
+</head>
+
+<body class="cuerpoInscripcion">
+
+    <h2 class="TituloForm">Formulario de Inscripcion</h2>
+
+    <form action="{{ url_for("encapsular") }}" method="post">
+        <label for="nombres">Nombres:</label>
+        <input type="text" id="nombres" name="nombres"  placeholder="Digite sus nombres" required><br>
+
+        <label for="apellidos">Apellidos:</label>
+        <input type="text" id="apellidos" name="apellidos" placeholder="Digite sus apellidos" required><br>
+
+        <label for="tipo_documento">Tipo de Documento:</label>
+        <select id="tipo_documento" name="tipo_documento" required>
+            <option value="cedula">C.C</option>
+            <option value="ti">T.I</option>
+            <option value="cc">C.E</option>
+        </select><br>
+
+        <label for="numero_documento">Número de Documento:</label>
+        <input type="text" id="numero_documento" name="numero_documento" placeholder="Digite su numero de documento" required><br> 
+
+        <label for="numero_celular">Número de celular:</label>
+        <input type="text" id="celular" name="celular" placeholder="Digite su numero de celular" required><br>
+
+        <label for="eps">EPS:</label>
+        <input type="text" id="eps" name="eps" placeholder="Example: Compensar" required><br>
+
+        <label for="edad">Edad:</label>
+        <input type="text" id="edad" name="edad" placeholder="Digite su edad" required><br>
+
+        <label for="fechan">Fecha de nacimiento:</label>
+        <input type="date" id="fechan" name="fechan" required><br>
+
+        <label for="grupo_sanguineo">Grupo Sanguíneo:</label>
+        <input type="text" id="grupo_sanguineo" name="grupo_sanguineo" placeholder="O,A,B,AB + o -" required><br>
+
+        <input type="submit" value="Registrar">
+    </form>
+
+</body>
+</html>

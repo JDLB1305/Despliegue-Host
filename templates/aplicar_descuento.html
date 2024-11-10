@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Aplicar Descuento</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Aplicar Descuento</h1>
+        <p>Valor de las clases inscritas: $<span id="valor-clase">{{ valor_clase }}</span></p>
+        <p>Descripción: <span id="texto_inscripcion">{{ descripcion_pago }}</span></p>
+        <form method="POST" action="{{ url_for('aplicar_descuento', persona_id=persona.id) }}">
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="usar_descuento" name="usar_descuento">
+                    <label class="form-check-label" for="usar_descuento">
+                        ¿Desea utilizar un código de descuento?
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label for="codigo_descuento">Código de descuento</label>
+                    <input type="text" class="form-control" id="codigo_descuento" name="codigo_descuento" disabled>
+                </div>
+                <button type="submit" class="btn btn-secondary" id="aplicar-descuento-btn">Aplicar descuento</button>
+            </div>
+        </form>
+
+        {% with message = get_message() %} {% if message %}
+        <div class="alert alert-{{ message[0] }}" role="alert">
+            {{ message[1] }}
+        </div>
+        {% endif %} {% endwith %}
+    </div>
+
+    <script>
+        document.getElementById('usar_descuento').addEventListener('change', function() {
+            document.getElementById('codigo_descuento').disabled = !this.checked;
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Acero App</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" href="/static/main.css">
+    <!-- SweetAlert -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        .alert {
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        
+        .alert-error {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+        
+        .alert-info {
+            color: #31708f;
+            background-color: #d9edf7;
+            border-color: #bce8f1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <h2 class="Titulo">Inicio Sesión</h2>
+
+        <div class="datos">
+            {% block content %}
+            <form method="post" action="{{ url_for('login') }}">
+                <div class="contenido">
+                    <label for="">Correo:</label>
+                    <p><input name="username" type="text" placeholder="Correo" required></p>
+                </div>
+
+                <div class="contenido">
+                    <label for="">Contraseña:</label>
+                    <p><input name="password" type="password" placeholder="Contraseña" required></p>
+                </div>
+
+                <div class="Cajaboton">
+                    <button class="boton1" type="submit" value="Log In">Ingresar</button>
+                </div>
+            </form>
+
+            <form method="post" action="{{ url_for('step_g') }}">
+                <div class="Cajaboton">
+                    <button class="boton1" type="submit" value="Sign up">Registrarse</button>
+                </div>
+            </form>
+
+            <form style="display: flex;justify-content: center;" method="post" action="{{ url_for('solicitar_restablecimiento') }}">
+                <button style="text-decoration: underline; margin: 10px; color: white;background-color: transparent;border: 0px;" type="submit" value="Sign up">Olvidé mi contraseña</button>
+            </form>
+
+            {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %} {% endblock %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            { % with messages = get_flashed_messages(with_categories = true) %
+            } { %
+                if messages %
+            } { %
+                for category, message in messages %
+            }
+            Swal.fire({
+                icon: '{{ category }}',
+                title: '{{ message }}',
+                confirmButtonText: 'Ok'
+            }); { % endfor %
+            } { % endif %
+            } { % endwith %
+            }
+        });
+    </script>
+</body>
+
+</html>

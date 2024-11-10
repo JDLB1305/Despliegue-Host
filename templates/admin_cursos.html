@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Cursos</title>
+<!--     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+ -->
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.2.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl1a9SX3uKtXf6iPg7ghwOGp3U7SkN9p3QynqN3wtpqcbPz3dxs" crossorigin="anonymous">
+
+
+    <style>
+        /* Estilos básicos para las tarjetas */
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .card {
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .card p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        /* Tarjeta de agregar nuevo curso */
+        
+        .add-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 250px;
+            height: 200px;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .add-card h1 {
+            font-size: 3rem;
+            color: #ccc;
+        }
+    </style>
+</head>
+
+
+<!--Mensajes flash de guía -->
+{% block content %} {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+<div class="alert alert-{{ category }}">{{ message }}</div>
+{% endfor %} {% endif %} {% endwith %} {% endblock %}
+
+
+<body>
+
+    <a href="{{ url_for('go_home6') }}" class="btn btn-outline-danger">
+        <i class="bi bi-house-door" style="margin-bottom: 0rem;"></i> Volver al Inicio
+    </a>
+    
+    <div class="container">
+
+        <!-- Tarjetas de cursos -->
+        {% for curso in cursos %}
+        <div class="card">
+            <h3>{{ curso.descripcion }}</h3>
+            <p>Clases: {{ curso.precio2 }}</p>
+            <p>Precio: ${{ curso.precio }}</p>
+            <a href="{{ url_for('editar_curso', id=curso.id) }}" class="btn btn-primary">Editar</a>
+            <a href="#" class="btn btn-danger" onclick="confirmarEliminacion({{ curso.id }}, '{{ curso.descripcion }}')">Eliminar</a>
+        </div>
+        {% endfor %}
+
+        <!-- Tarjeta para agregar nuevo curso -->
+        <div class="add-card">
+            <a href="{{ url_for('nuevo_curso') }}" style="font-size: 90px">
+                +
+            </a>
+        </div>
+    </div>
+
+
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    function confirmarEliminacion(id, descripcion) {
+        Swal.fire({
+            title: '¿Seguro que quieres eliminar el curso?',
+            text: `Vas a eliminar el curso: ${descripcion}`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirige a la ruta de eliminación
+                window.location.href = `/admin/cursos/eliminar/${id}`;
+            }
+        });
+    }
+</script>
+
+
+
+</html>

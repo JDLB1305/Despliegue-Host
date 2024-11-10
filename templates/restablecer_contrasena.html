@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Restablecer Contraseña</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <!-- Bloque para mensajes -->
+    {% with message = get_message() %} {% if message %}
+    <div class="flashes {{ message[0] }}">
+        {{ message[1] }}
+    </div>
+    {% endif %} {% endwith %}
+
+
+    <div class="container mt-5">
+        <h1>Restablecer Contraseña</h1>
+        <form action="{{ url_for('restablecer_contrasena', token=token) }}" method="post">
+            <div class="form-group">
+                <label for="nueva_contrasena">Nueva Contraseña</label>
+                <input type="password" class="form-control" id="nueva_contrasena" name="nueva_contrasena" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmar_contrasena">Confirmar Contraseña</label>
+                <input type="password" class="form-control" id="confirmar_contrasena" name="confirmar_contrasena" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Restablecer Contraseña</button>
+        </form>
+    </div>
+</body>
+
+</html>

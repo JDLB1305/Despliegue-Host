@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Inscripciones</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* Fondo degradado en el body */
+        body {
+            background: linear-gradient(to right, #56ccf2, #2f80ed);
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        /* Ajuste de estilo de la cabecera */
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 25px 0;
+        }
+
+        h1 {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        /* Botón de regresar al inicio */
+        .btn-outline-danger {
+            width: 150px;
+            margin-left: -64em;
+        }
+
+        /* Estilo de la sección de acordeón */
+        .accordion-section {
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .accordion-toggle {
+            cursor: pointer;
+            padding: 15px;
+            font-weight: bold;
+            background-color: #f2f2f2;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        .accordion-content {
+            display: none;
+            padding: 10px;
+        }
+
+        /* Ajustes de tabla */
+        .table {
+            background-color: #fff;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="header-container">
+            <h1>Inscripciones de Usuarios</h1>
+            <a href="{{ url_for('go_home6') }}" class="btn btn-outline-danger">
+                <p class="bi bi-house-door" style="margin-bottom: 0rem;"> Volver al Inicio</p>
+            </a>
+        </div>
+
+        {% for usuario in inscripciones %}
+        <div class="accordion-section">
+            <h5 class="accordion-toggle">{{ usuario.correo }}</h5>
+            <div class="accordion-content">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Persona</th>
+                            <th>Tipo de Documento</th>
+                            <th>Número de Documento</th>
+                            <th>Clases</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for persona in usuario.personas %}
+                        <tr>
+                            <td>{{ persona.nombres }} {{ persona.apellidos }}</td>
+                            <td>{{ persona.tipo_documento }}</td>
+                            <td>{{ persona.numero_doc }}</td>
+                            <td>
+                                <ul>
+                                    {% for clase in persona.clases %}
+                                    <li>
+                                        {{ clase.descripcion }} - {{ clase.fecha_programada }} ({{ clase.hora_inicio }} - {{ clase.hora_fin }}), {{ clase.ubicacion }}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.accordion-toggle').click(function() {
+                var content = $(this).next('.accordion-content');
+                content.slideToggle(200);
+                $('.accordion-content').not(content).slideUp(200);
+            });
+        });
+    </script>
+</body>
+
+</html>

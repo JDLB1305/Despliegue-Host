@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Administrar Descuentos</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <a href="{{ url_for('go_home6') }}" class="btn btn-outline-danger" style="float: right;">
+            <i class="bi bi-house-door"> Volver al Inicio</i>
+        </a>
+        <h2 class="TituloDisc">Administrar Descuentos</h2>
+        <a href="{{ url_for('agregar_descuento') }}" class="btn btn-success mb-3">
+            <i class="bi bi-plus-circle-dotted">  Agregar Descuento</i>
+        </a>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Porcentaje</th>
+                    <th>Código</th>
+                    <th>Habilitado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for descuento in descuentos %}
+                <tr>
+                    <td>{{ descuento.id == 1 and 'Renovaciones' or descuento.id }}</td>
+                    <!-- Aquí cambiamos el ID -->
+                    <td>{{ descuento.id == 1 and 'N/A' or descuento.porcentaje }}%</td>
+                    <td>{{ descuento.code }}</td>
+                    <td>{{ descuento.habilitado }}</td>
+                    <td>
+                        <a href="{{ url_for('editar_descuento', id=descuento.id) }}" class="btn btn-primary btn-sm">Editar</a>
+                        <form action="{{ url_for('habilitar_descuento', id=descuento.id) }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-warning btn-sm">{{ 'Deshabilitar' if descuento.habilitado == 'SI' else 'Habilitar' }}</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

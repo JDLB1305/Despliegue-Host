@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar Pago</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Confirmar Pago</h1>
+        <p>Valor final de su compra: $<span id="valor-final">{{ valor_final }}</span></p>
+        <p>Descripción: <span id="texto_inscripcion">{{ descripcion_pago }}</span></p>
+        <form method="POST" action="{{ url_for('transaccion_clases', persona_id=persona.id) }}">
+            <input type="hidden" name="valor_final" id="valor_final" value="{{ valor_final }}">
+            <button type="submit" class="btn btn-primary">Pagar</button>
+        </form>
+
+        <form>
+            <script src='https://checkout.epayco.co/checkout.js' data-epayco-key='a980c207ad4ee4e6e2e1a172da71aaab' class='epayco-button' data-epayco-amount='{{ valor_final }}' data-epayco-tax='0.00' data-epayco-tax-ico='0.00' data-epayco-tax-base='5000' data-epayco-name='prueba 2'
+                data-epayco-description='prueba 2' data-epayco-currency='cop' data-epayco-country='CO' data-epayco-test='true' data-epayco-external='false' data-epayco-response='http://127.0.0.1:5000/respuesta_pago' data-epayco-confirmation='http://127.0.0.1:5000/confirmacion_pago'
+                data-epayco-button='https://multimedia.epayco.co/dashboard/btns/btn2.png'>
+            </script>
+        </form>
+
+        {% with message = get_message() %} {% if message %}
+        <div class="alert alert-{{ message[0] }}" role="alert">
+            {{ message[1] }}
+        </div>
+        {% endif %} {% endwith %}
+    </div>
+</body>
+
+</html>

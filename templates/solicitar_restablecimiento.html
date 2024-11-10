@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Solicitar Restablecimiento de Contraseña</title>
+</head>
+
+<body>
+    <form method="POST">
+        <label for="correo">Correo electrónico:</label>
+        <input type="email" id="correo" name="correo" required>
+        <button type="submit">Solicitar Restablecimiento</button>
+    </form>
+
+
+    <!-- Bloque para mensajes -->
+    {% with message = get_message() %} {% if message %}
+    <div class="flashes {{ message[0] }}">
+        {{ message[1] }}
+    </div>
+    {% endif %} {% endwith %}
+
+</body>
+
+</html>

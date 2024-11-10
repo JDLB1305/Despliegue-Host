@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Personas</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- SweetAlert integration -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+
+
+</head>
+
+<style>
+    /* Estilos para el contenedor de botones */
+    
+    .button-container {
+        background-color: #f8f9fa;
+        /* Color de fondo suave */
+        padding: 10px;
+        /* Espaciado interno */
+        border-radius: 8px;
+        /* Bordes redondeados */
+        display: flex;
+        justify-content: space-between;
+        /* Distribuye los botones de manera equitativa */
+    }
+    /* Asegura que los botones tengan el mismo tamaño */
+    
+    .button-container .btn {
+        flex: 1;
+        /* Cada botón toma un ancho igual */
+        margin: 0 5px;
+        /* Espaciado entre botones */
+        white-space: nowrap;
+        /* Evita que el texto de los botones se divida en dos líneas */
+    }
+    /* Container para organizar las dos columnas */
+    
+    .button-container {
+        display: flex;
+        justify-content: space-between;
+    }
+    /* Cada columna de botones */
+    
+    .button-column {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        /* Espaciado uniforme entre los botones */
+    }
+    /* Ajuste adicional para que los botones tengan el mismo ancho */
+    
+    .button-column .btn {
+        width: 100%;
+    }
+</style>
+
+<body>
+
+
+    <div class="container mt-5">
+
+        <!-- Mensajes flash para renovación -->
+        {% block content %} {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %} {% endif %} {% endwith %} {% endblock %}
+
+
+        <div class="container mt-5">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h1 class="display-4 text-primary">Lista de Personas</h1>
+                <a href="{{ url_for('go_home7') }}" class="btn btn-danger">
+                    <i class="bi bi-house-door"></i> Volver al Inicio
+                </a>
+            </div>
+
+
+            <table class="table table-striped table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Documento</th>
+                        <th>Clases Inscritas</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for persona in personas %}
+                    <tr>
+                        <td>{{ persona.nombres }}</td>
+                        <td>{{ persona.apellidos }}</td>
+                        <td>{{ persona.tipo_documento }} {{ persona.numero_doc }} </td>
+                        <td>
+                            <!-- Mostrar el número de clases inscritas junto con el plan asociado -->
+                            {% if persona.clases_inscritas >= 24 %} {{ persona.clases_pagadas }} -- Selección Kraken {% else %} {{ persona.clases_pagadas }} -- Cursos de natación {% endif %}
+                        </td>
+                        <td>
+                            <div class="button-container">
+                                <!-- Primera columna: Pagar, Programar Clases, Generar Carnet -->
+                                <div class="button-column">
+                                    {% if persona.clases_pay == 0 %}
+                                    <a href="{{ url_for('pagar', persona_id=persona.id) }}" class="btn btn-success" aria-label="Ver detalles de {{ persona.nombres }}">
+                                        Pagar <i class="bi bi-cash"></i>
+                                    </a> {% else %}
+                                    <button class="btn btn-success" disabled aria-label="Ver detalles de {{ persona.nombres }}">
+                                        Pagar <i class="bi bi-cash"></i>
+                                    </button> {% endif %} {% if persona.clases_pay == 1 and persona.clases_ava == 0 %}
+                                    <form action="{{ url_for('programar_clases') }}" method="POST">
+                                        <input type="hidden" name="persona_id" value="{{ persona.id }}">
+                                        <button type="submit" class="btn btn-info">Programar clases <i class="bi bi-calendar-plus"></i></button>
+                                    </form>
+                                    {% else %}
+                                    <button class="btn btn-info" disabled>Programar clases <i class="bi bi-calendar-plus"></i></button> {% endif %}
+
+                                    <form action="{{ url_for('generar_carnet', persona_id=persona.id) }}" method="GET">
+                                        <button type="submit" class="btn btn-warning">Generar Carnet <i class="bi bi-file-earmark-person-fill"></i></button>
+                                    </form>
+                                </div>
+
+                                <!-- Segunda columna: Renovar Suscripción, Detalles -->
+                                <div class="button-column">
+                                    <form action="{{ url_for('renovar_suscripcion', persona_id=persona.id) }}" method="post" class="renovar-suscripcion-form">
+                                        <button type="button" class="btn btn-primary renovar-btn" {% if not renovaciones_habilitadas %}disabled{% endif %}>
+                                            Renovar Suscripción <i class="bi bi-rewind-btn-fill"></i>
+                                        </button>
+                                    </form>
+
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detallesModal" onclick="mostrarDetalles('{{ persona.nombres }}', '{{ persona.apellidos }}', '{{ persona.tipo_documento }}', '{{ persona.numero_doc }}', '{{ persona.fecha_nacimiento }}', '{{ persona.edad }}', '{{ persona.sexo }}', '{{ persona.direccion_residencia }}', '{{ persona.barrio }}', '{{ persona.numero_telefono }}', '{{ persona.uso_imagenes }}', '{{ persona.nivel_educativo }}', '{{ persona.grupo_poblacional }}', '{{ persona.eps }}', '{{ persona.nombre_acudiente }}', '{{ persona.numero_acudiente }}', '{{ persona.discapacidad }}', '{{ persona.enfermedad_cronica }}', '{{ persona.hospitalizaciones }}', '{{ persona.tratamientos }}', '{{ persona.condicion_fisica }}', '{{ persona.talla }}', '{{ persona.peso }}')">
+                                        Detalles <i class="bi bi-info-square"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+            <!-- SweetAlert integration -->
+            <script>
+                // Escuchar el evento de submit para formularios de renovación
+                document.querySelectorAll('.renovar-suscripcion-form').forEach(form => {
+                    form.addEventListener('submit', function(event) {
+                        event.preventDefault(); // Evitar recarga de página
+
+                        // Realizar petición POST con Fetch API
+                        fetch(this.action, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({}) // Si necesitas enviar datos adicionales, agrégalos aquí
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // Mostrar mensaje con SweetAlert
+                                Swal.fire({
+                                    icon: data.alert_type,
+                                    title: data.message,
+                                    confirmButtonText: 'OK'
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error en la renovación:', error);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error al renovar la suscripción',
+                                    text: 'Inténtalo de nuevo más tarde.',
+                                    confirmButtonText: 'OK'
+                                });
+                            });
+                    });
+                });
+
+                function mostrarDetalles(nombres, apellidos, tipoDocumento, numeroDoc, fechaNacimiento, edad, sexo, direccion, barrio, telefono, usoImagenes, nivelEducativo, grupoPoblacional, eps, nombreAcudiente, numeroAcudiente, discapacidad, enfermedadCronica, hospitalizaciones, tratamientos, condicionFisica, talla, peso) {
+                    // Llenar los campos del modal con la información de la persona
+                    document.getElementById('modalNombres').innerText = nombres;
+                    document.getElementById('modalApellidos').innerText = apellidos;
+                    document.getElementById('modalTipoDocumento').innerText = tipoDocumento;
+                    document.getElementById('modalNumeroDoc').innerText = numeroDoc;
+                    document.getElementById('modalFechaNacimiento').innerText = fechaNacimiento;
+                    document.getElementById('modalEdad').innerText = edad;
+                    document.getElementById('modalSexo').innerText = sexo;
+                    document.getElementById('modalDireccion').innerText = direccion;
+                    document.getElementById('modalBarrio').innerText = barrio;
+                    document.getElementById('modalTelefono').innerText = telefono;
+                    document.getElementById('modalUsoImagenes').innerText = usoImagenes;
+                    document.getElementById('modalNivelEducativo').innerText = nivelEducativo;
+                    document.getElementById('modalGrupoPoblacional').innerText = grupoPoblacional;
+                    document.getElementById('modalEPS').innerText = eps;
+                    document.getElementById('modalNombreAcudiente').innerText = nombreAcudiente;
+                    document.getElementById('modalNumeroAcudiente').innerText = numeroAcudiente;
+                    document.getElementById('modalDiscapacidad').innerText = discapacidad;
+                    document.getElementById('modalEnfermedadCronica').innerText = enfermedadCronica;
+                    document.getElementById('modalHospitalizaciones').innerText = hospitalizaciones;
+                    document.getElementById('modalTratamientos').innerText = tratamientos;
+                    document.getElementById('modalCondicionFisica').innerText = condicionFisica;
+                    document.getElementById('modaltalla').innerText = talla;
+                    document.getElementById('modalPeso').innerText = peso;
+                }
+            </script>
+
+
+
+
+
+            <script>
+                // Seleccionar todos los botones de renovación
+                document.querySelectorAll('.renovar-btn').forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        // Al hacer clic en el botón de renovación
+                        Swal.fire({
+                            title: '¿Estás seguro?',
+                            text: "¿Deseas renovar la suscripción?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Sí, renovar!',
+                            cancelButtonText: 'Cancelar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Enviar el formulario asociado
+                                this.closest('form').submit();
+                            }
+                        });
+                    });
+                });
+            </script>
+
+
+            <!-- Modal para mostrar detalles de la persona -->
+            <div class="modal fade" id="detallesModal" tabindex="-1" role="dialog" aria-labelledby="detallesModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="detallesModalLabel">Detalles de la Persona</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p><strong>Nombres:</strong> <span id="modalNombres"></span></p>
+                                    <p><strong>Apellidos:</strong> <span id="modalApellidos"></span></p>
+                                    <p><strong>Tipo Documento:</strong> <span id="modalTipoDocumento"></span></p>
+                                    <p><strong>Número Documento:</strong> <span id="modalNumeroDoc"></span></p>
+                                    <p><strong>Fecha Nacimiento:</strong> <span id="modalFechaNacimiento"></span></p>
+                                    <p><strong>Edad:</strong> <span id="modalEdad"></span></p>
+                                    <p><strong>Sexo:</strong> <span id="modalSexo"></span></p>
+                                    <p><strong>Dirección:</strong> <span id="modalDireccion"></span></p>
+                                    <p><strong>Barrio:</strong> <span id="modalBarrio"></span></p>
+                                    <p><strong>Teléfono:</strong> <span id="modalTelefono"></span></p>
+                                    <p><strong>Uso de Imágenes:</strong> <span id="modalUsoImagenes"></span></p>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <p><strong>Nivel Educativo:</strong> <span id="modalNivelEducativo"></span></p>
+                                    <p><strong>Grupo Poblacional:</strong> <span id="modalGrupoPoblacional"></span></p>
+                                    <p><strong>EPS:</strong> <span id="modalEPS"></span></p>
+                                    <p><strong>Nombre Acudiente:</strong> <span id="modalNombreAcudiente"></span></p>
+                                    <p><strong>Número Acudiente:</strong> <span id="modalNumeroAcudiente"></span></p>
+                                    <p><strong>Discapacidad:</strong> <span id="modalDiscapacidad"></span></p>
+                                    <p><strong>Enfermedad Crónica:</strong> <span id="modalEnfermedadCronica"></span></p>
+                                    <p><strong>Hospitalizaciones:</strong> <span id="modalHospitalizaciones"></span></p>
+                                    <p><strong>Tratamientos:</strong> <span id="modalTratamientos"></span></p>
+                                    <p><strong>Condición Física:</strong> <span id="modalCondicionFisica"></span></p>
+                                    <p><strong>Estatura(m):</strong> <span id="modalTalla"></span></p>
+                                    <p><strong>Peso:</strong> <span id="modalPeso"></span></p>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+</body>
+
+</html>

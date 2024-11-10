@@ -1,0 +1,10 @@
+.botones {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 31px;
+}
+
+.botones .agregar {
+    margin-right: 70px;
+}

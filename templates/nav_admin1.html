@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Vista del Administrador</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Vista del Administrador</h1>
+
+        <!-- Acordeón de Inscripciones -->
+        <div class="accordion" id="accordionInscripciones">
+            <div class="card">
+                <div class="card-header" id="headingInscripciones">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseInscripciones" aria-expanded="true" aria-controls="collapseInscripciones">
+                            Inscripciones
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseInscripciones" class="collapse" aria-labelledby="headingInscripciones" data-parent="#accordionInscripciones">
+                    <div class="card-body">
+                        <button class="btn btn-primary">Ver inscripciones</button>
+                        <!-- Modificar el enlace para redirigir al mes actual -->
+                        <a href="{{ url_for('calendario_actual') }}" class="btn btn-info">Ver Clases</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acordeón de Usuarios -->
+        <div class="accordion mt-3" id="accordionUsuarios">
+            <div class="card">
+                <div class="card-header" id="headingUsuarios">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseUsuarios" aria-expanded="true" aria-controls="collapseUsuarios">
+                            Usuarios
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseUsuarios" class="collapse" aria-labelledby="headingUsuarios" data-parent="#accordionUsuarios">
+                    <div class="card-body">
+                        <a href="{{ url_for('gestion_usuarios') }}" class="btn btn-info">Ver lista de usuarios</a>
+                        <button class="btn btn-warning">Ver solicitudes de modificación</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acordeón de Información Financiera -->
+        <div class="accordion mt-3" id="accordionInformacionFinanciera">
+            <div class="card">
+                <div class="card-header" id="headingInformacionFinanciera">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseInformacionFinanciera" aria-expanded="true" aria-controls="collapseInformacionFinanciera">
+                            Información Financiera
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseInformacionFinanciera" class="collapse" aria-labelledby="headingInformacionFinanciera" data-parent="#accordionInformacionFinanciera">
+                    <div class="card-body">
+                        <button class="btn btn-secondary">Ver información de pago de usuarios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

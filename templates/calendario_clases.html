@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Calendario Mensual</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <style>
+        .week-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .day-column {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+            background-color: #f9f9f9;
+        }
+        
+        .class-container {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #ffffff;
+        }
+        
+        .collapse {
+            transition: height 0.3s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- Bloque para mensajes -->
+    {% with message = get_message() %} {% if message %}
+    <div class="flashes {{ message[0] }}">
+        {{ message[1] }}
+    </div>
+    {% endif %} {% endwith %}
+
+
+    <div class="container mt-5">
+        <h1>Calendario de Clases para {{ month }} / {{ year }}</h1>
+
+        <!-- Botones para cambiar entre meses -->
+        <div>
+            <button class="btn btn-secondary" onclick="window.location.href='{{ url_for('calendario', year=(year - 1 if month == 1 else year), month=(12 if month == 1 else month - 1)) }}'">Mes Anterior</button>
+            <button class="btn btn-secondary" onclick="window.location.href='{{ url_for('calendario', year=(year + 1 if month == 12 else year), month=(1 if month == 12 else month + 1)) }}'">Mes Siguiente</button>
+        </div>
+
+        <!-- Formulario global para enviar todos los datos -->
+        <form method="post" action="{{ url_for('programar_clase') }}">
+            {% for semana in semanas %}
+            <div class="week-row">
+                {% for dia in semana %}
+                <div class="day-column {% if dia is none %}empty-day{% endif %}" id="day-{{ dia.day }}">
+                    {% if dia.month == month %} {{ dia.strftime('%A %d') }}
+
+                    <!-- Miniformulario para la primera clase -->
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#clase1-{{ dia.day }}" aria-expanded="false">
+                        Programar Clase 1
+                    </button>
+                    <div id="clase1-{{ dia.day }}" class="collapse class-container">
+                        <input type="hidden" name="fecha_programada_{{ dia.day }}_1" value="{{ year }}-{{ month }}-{{ dia.day }}">
+
+                        <!-- Hora de inicio y final -->
+                        <div class="form-group">
+                            <label for="hora_inicio_{{ dia.day }}_1">Hora de Inicio:</label>
+                            <input type="time" name="hora_inicio_{{ dia.day }}_1" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hora_final_{{ dia.day }}_1">Hora Final:</label>
+                            <input type="time" name="hora_final_{{ dia.day }}_1" class="form-control">
+                        </div>
+
+                        <!-- Profesor asignado -->
+                        <div class="form-group">
+                            <label para="profesor_{{ dia.day }}_1">Asignar Profesor:</label>
+                            <select name="profesor_{{ dia.day }}_1" class="form-control">
+                                <option value="Juan Jose">Juan Jose</option>
+                                <option value="Juan Carlos">Juan Carlos</option>
+                                <option value="Joapi">Joapi</option>
+                            </select>
+                        </div>
+
+                        <!-- Lugar de la clase -->
+                        <div class="form-group">
+                            <label para="ubicacion_{{ dia.day }}_1">Lugar:</label>
+                            <input type="text" name="ubicacion_{{ dia.day }}_1" class="form-control">
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="form-group">
+                            <label para="descripcion_{{ dia.day }}_1">Descripción:</label>
+                            <textarea name="descripcion_{{ dia.day }}_1" class="form-control"></textarea>
+                        </div>
+
+                        <!-- Número de cupos -->
+                        <div class="form-group">
+                            <label para="numero_cupos_{{ dia.day }}_1">Número de cupos JIJIA:</label>
+                            <input type="number" name="numero_cupos_{{ dia.day }}_1" class="form-control" min="1">
+                        </div>
+                    </div>
+
+                    <!-- Miniformulario para la segunda clase -->
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#clase2-{{ dia.day }}" aria-expanded="false">
+                        Programar Clase 2
+                    </button>
+                    <div id="clase2-{{ dia.day }}" class="collapse class-container">
+                        <input type="hidden" name="fecha_programada_{{ dia.day }}_2" value="{{ year }}-{{ month }}-{{ dia.day }}">
+
+                        <!-- Hora de inicio y final -->
+                        <div class="form-group">
+                            <label para="hora_inicio_{{ dia.day }}_2">Hora de Inicio:</label>
+                            <input type="time" name="hora_inicio_{{ dia.day }}_2" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label para="hora_final_{{ dia.day }}_2">Hora Final:</label>
+                            <input type="time" name="hora_final_{{ dia.day }}_2" class="form-control">
+                        </div>
+
+                        <!-- Profesor asignado -->
+                        <div class="form-group">
+                            <label para="profesor_{{ dia.day }}_2">Asignar Profesor:</label>
+                            <select name="profesor_{{ dia.day }}_2" class="form-control">
+                                <option value="Juan Jose">Juan Jose</option>
+                                <option value="Juan Carlos">Juan Carlos</option>
+                                <option value="Joapi">Joapi</option>
+                            </select>
+                        </div>
+
+                        <!-- Lugar de la clase -->
+                        <div class="form-group">
+                            <label para="ubicacion_{{ dia.day }}_2">Lugar:</label>
+                            <input tipo="text" name="ubicacion_{{ dia.day }}_2" class="form-control">
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="form-group">
+                            <label para="descripcion_{{ dia.day }}_2">Descripción:</label>
+                            <textarea name="descripcion_{{ dia.day }}_2" class="form-control"></textarea>
+                        </div>
+
+                        <!-- Número de cupos -->
+                        <div class="form-group">
+                            <label para="numero_cupos_{{ dia.day }}_2">Número de cupos:</label>
+                            <input tipo="number" name="numero_cupos_{{ dia.day }}_2" class="form-control">
+                        </div>
+                    </div>
+
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <!-- Botón para enviar todos los datos a la vez -->
+            <div class="form-group">
+                <button class="btn btn-success" type="submit">Guardar Todas las Clases</button>
+            </div>
+        </form>
+        <!-- Fin del formulario global -->
+    </div>
+</body>
+
+</html>

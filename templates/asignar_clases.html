@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Asignar Clases</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <!-- Bloque para mensajes -->
+    {% with message = get_message() %} {% if message %}
+    <div class="flashes {{ message[0] }}">
+        {{ message[1] }}
+    </div>
+    {% endif %} {% endwith %}
+
+    <div class="container mt-5">
+        <h1>Asignar Clases</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellidos</th>
+                    <th>Clases Inscritas</th>
+                    <th>Clases Pagadas</th>
+                    <th>Clases Disponibles</th>
+                    <th>Clases Restantes</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for persona in personas %}
+                <tr>
+                    <td>{{ persona.nombres }}</td>
+                    <td>{{ persona.apellidos }}</td>
+                    <td>
+                        {% if persona.clases_inscritas in [4, 8, 12] %} Cursos - {{ persona.clases_inscritas }} clases por mes {% elif persona.clases_inscritas > 12 %} Selección Kraken {% endif %}
+                    </td>
+                    <td>
+                        {% if persona.clases_pay == 0 %} No pagado {% elif persona.clases_pay == 1 %} Pagado {% endif %}
+                    </td>
+                    <td>
+                        {% if persona.clases_ava == 0 %} No inscrito aún {% elif persona.clases_ava == 1 %} Clases programadas {% endif %}
+                    </td>
+                    <td>{{ persona.clases_restantes }}</td>
+                    <td>
+                        <!-- Campo de texto para el número de clases -->
+                        <form action="{{ url_for('add_classuser') }}" method="post" style="display:inline;">
+                            <input type="number" id="num_clases_{{ persona.id }}" name="num_clases" min="1" class="form-control" placeholder="Número de clases">
+                            <input type="hidden" name="persona_id" value="{{ persona.id }}">
+                            <button type="submit" class="btn btn-primary mt-2">
+                                Asignar Clases
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

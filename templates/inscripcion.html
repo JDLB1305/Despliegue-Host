@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>Mostrar Datos</title>
+    <style>
+        /* Estilos para la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Estilos para las filas pares */
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; margin: 5px; padding: 15px;">Tabla de Inscripciones</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Tipo de Documento</th>
+                <th>Número de Documento</th>
+                <th>Número Celular</th>
+                <th>EPS</th>
+                <th>Edad</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Grupo Sanguíneo</th>
+                <th>Clases</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dato in datos %}
+                {% set values = json.loads(dato.values) %}
+                {% if values %}
+                    {% for value in values %}
+                        <tr>
+                            <td>{{ value[0] if value else "" }}</td>
+                            <td>{{ value[1] if value else "" }}</td>
+                            <td>{{ value[2] if value else "" }}</td>
+                            <td>{{ value[3] if value else "" }}</td>
+                            <td>{{ value[4] if value else "" }}</td>
+                            <td>{{ value[5] if value else "" }}</td>
+                            <td>{{ value[6] if value else "" }}</td>
+                            <td>{{ value[7] if value else "" }}</td>
+                            <td>{{ value[8] if value else "" }}</td>
+                            <td>
+                                <form action="{{ url_for('clases', reference=value[3]) }}">
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        Clases
+                                    </button>
+                                    <input type="hidden" name="reference" value="{{ value[3] }}">
+                                </form>
+                            </td> 
+
+
+                            <td>
+                                <form action="{{ url_for('eliminar') }}" method="post">
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        <ion-icon size="large" name="trash"></ion-icon>
+                                    </button>
+                                    <input type="hidden" name="fila_id" value="{{ value[-1] }}">
+                                </form>
+                            </td>
+
+
+
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <a href=""><button class="btn btn-primary">Agregar Nuevo Dato</button></a>
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+</body>
+</html>
+

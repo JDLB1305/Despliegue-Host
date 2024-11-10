@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Asistencia</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .clase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 20px);
+            gap: 5px;
+            justify-content: start;
+        }
+        
+        .clase {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        
+        .clase.taken::before {
+            content: "x";
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Detalle de Asistencia para la Clase</h1>
+        <h2>{{ clase.descripcion }}</h2>
+        <p><strong>Fecha:</strong> {{ clase.fecha_programada }}</p>
+        <p><strong>Hora:</strong> {{ clase.hora_inicio }} - {{ clase.hora_fin }}</p>
+        <p><strong>Ubicación:</strong> {{ clase.ubicacion }}</p>
+
+        <!-- Formulario para tomar asistencia -->
+        <form method="POST" action="{{ url_for('guardar_asistencia', clase_id=clase.id) }}">
+            <table class="table mt-4">
+                <thead>
+                    <tr>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Edad</th>
+                        <th>Número de Teléfono</th>
+                        <th>Clases Pagadas</th>
+                        <th>Clases Restantes</th>
+                        <th>Asistencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for persona in asistentes %}
+                    <tr>
+                        <td>{{ persona.nombres }}</td>
+                        <td>{{ persona.apellidos }}</td>
+                        <td>{{ persona.edad }}</td>
+                        <td>{{ persona.numero_telefono }}</td>
+                        <td>{{ persona.clases_pagadas }}</td>
+                        <td>
+                            <div class="clase-grid">
+                                {% for i in range(persona.clases_inscritas) %}
+                                <div class="clase {% if i < (persona.clases_inscritas - persona.clases_restantes) %}taken{% endif %}"></div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="presente_{{ persona.id }}" {% if persona.clases_restantes==0 %}disabled{% endif %}>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-primary">Guardar Asistencia</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

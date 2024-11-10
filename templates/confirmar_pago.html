@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Confirmar Pago</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>Confirmar Pago</h1>
+
+        <!-- Información de pago -->
+        <p>Valor de las clases: $<span id="valor-clase">{{ valor_clase }}</span></p>
+        <p>Descripción: <span id="descripcion-pago">{{ descripcion_pago }}</span></p>
+
+        <!-- Aplicar descuento -->
+        <form id="descuento-form">
+            <div class="form-group">
+                <label for="codigo-descuento">Código de Descuento:</label>
+                <input type="text" class="form-control" id="codigo-descuento" name="codigo_descuento" placeholder="Ingrese su código de descuento">
+            </div>
+            <button type="button" class="btn btn-primary" id="aplicar-descuento">Aplicar Descuento</button>
+        </form>
+
+        <hr>
+
+        <!-- Valor final del pago -->
+        <p>Valor final de su compra: $<span id="valor-final">{{ valor_final }}</span></p>
+
+        <!-- Botón de pago -->
+        <form method="POST" action="{{ url_for('transaccion_clases', persona_id=persona.id) }}">
+            <input type="hidden" name="valor_final" id="input-valor-final" value="{{ valor_final }}">
+            <button type="submit" class="btn btn-success">Pagar</button>
+        </form>
+
+        <!-- Botón de Epayco -->
+        <form>
+            <script src="https://checkout.epayco.co/checkout.js" data-epayco-key="a980c207ad4ee4e6e2e1a172da71aaab" class="epayco-button" data-epayco-amount="{{ valor_final }}" data-epayco-tax="0.00" data-epayco-tax-ico="0.00" data-epayco-tax-base="5000" data-epayco-name="Pago Clases"
+                data-epayco-description="{{ descripcion_pago }}" data-epayco-currency="cop" data-epayco-country="CO" data-epayco-test="true" data-epayco-external="false" data-epayco-response="http://127.0.0.1:5000/respuesta_pago" data-epayco-confirmation="http://127.0.0.1:5000/confirmacion_pago"
+                data-epayco-button="https://multimedia.epayco.co/dashboard/btns/btn2.png">
+            </script>
+        </form>
+
+        <!-- Mensajes de estado -->
+        <div id="mensaje-descuento"></div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#aplicar-descuento').on('click', function() {
+                var codigo_descuento = $('#codigo-descuento').val();
+                var persona_id = {
+                    {
+                        persona.id
+                    }
+                };
+
+                // Hacer petición AJAX para aplicar descuento
+                $.ajax({
+                    url: '{{ url_for("aplicar_descuento_ajax", persona_id=persona.id) }}',
+                    type: 'POST',
+                    data: {
+                        codigo_descuento: codigo_descuento,
+                        persona_id: persona_id
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#valor-final').text(response.valor_final);
+                            $('#input-valor-final').val(response.valor_final);
+                            $('#mensaje-descuento').html('<div class="alert alert-success">Descuento aplicado. Nuevo valor: $' + response.valor_final + '</div>');
+                        } else {
+                            $('#mensaje-descuento').html('<div class="alert alert-danger">' + response.message + '</div>');
+                        }
+                    },
+                    error: function() {
+                        $('#mensaje-descuento').html('<div class="alert alert-danger">Error al aplicar el descuento.</div>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
