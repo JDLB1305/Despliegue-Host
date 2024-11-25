@@ -29,13 +29,15 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy import LargeBinary, Table
 from babel.dates import format_date
 from math import ceil
+import pymysql
+pymysql.install_as_MySQLdb()
 
 
 app=Flask(__name__)
 #postgresql://bdplatacero_user:Jk1DnAPh5GFugIbl0zw47N66n6WaaTJt@dpg-csk0g4lds78s7395pqgg-a.oregon-postgres.render.com/bdplatacero
 #app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://bdplatacero_user:Jk1DnAPh5GFugIbl0zw47N66n6WaaTJt@dpg-csk0g4lds78s7395pqgg-a.oregon-postgres.render.com/bdplatacero"
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Estabilisador12345@localhost/PlatAcero'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:QUvqURjsewwEEiIsgoBCHVHcmReFwzHv@junction.proxy.rlwy.net:16514/railway'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:QUvqURjsewwEEiIsgoBCHVHcmReFwzHv@junction.proxy.rlwy.net:16514/railway'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = "tu_clave_secreta"
 app.permanent_session_lifetime = timedelta(minutes=30) # La sesión expira en 30 minutos
