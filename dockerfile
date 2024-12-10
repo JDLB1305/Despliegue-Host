@@ -19,9 +19,8 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Instala dependencias directamente en el sistema (sin entorno virtual para simplificar)
-RUN pip install --upgrade pip setuptools==65.5.1 wheel && \
-    pip install -r requirements.txt
+# Instala dependencias sin instalar dependencias adicionales automáticas
+RUN pip install --no-deps -r requirements.txt
 
 # Expone el puerto 5000 (el que usa Flask por defecto)
 EXPOSE 5000
