@@ -7,6 +7,9 @@ WORKDIR /app
 # Copia los archivos de tu proyecto al contenedor
 COPY . /app
 
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install git+https://github.com/docker/dockerpty.git
+
 # Instala dependencias del sistema
 RUN apt-get update && apt-get install -y \
     build-essential \
