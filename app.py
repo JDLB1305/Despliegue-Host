@@ -2582,9 +2582,8 @@ def eliminar_usuario(id):
 
 
 
-if __name__ == '__main__':
+"""if __name__ == '__main__':
     
     #DEBUG is SET to TRUE. CHANGE FOR PROD
     app.run(debug=False, host='0.0.0.0')
-    
-    
+    """
