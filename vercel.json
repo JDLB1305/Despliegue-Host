@@ -2,8 +2,7 @@
   "builds": [
     {
       "src": "api/index.py",
-      "use": "@vercel/python",
-      "includeFiles": ["requirements.txt"]
+      "use": "@vercel/python"
     }
   ],
   "routes": [
@@ -13,4 +12,5 @@
     }
   ]
 }
+
 
